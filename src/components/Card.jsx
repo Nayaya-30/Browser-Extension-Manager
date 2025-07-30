@@ -6,12 +6,11 @@ function Card() {
     const [removedItems, setRemovedItems] = useState([]);
     const [permanentlyRemoved, setPermanentlyRemoved] = useState([]);
     const [isDark, setIsDark] = useState(false);
-    const [items, setItems] = useState(data); // store mutable data
+    const [items, setItems] = useState(data);
 
     const handleIsDark = () => {
         setIsDark(prev => !prev);
     };
-
     const handleRemoved = (id) => {
         if (window.confirm('Are you sure you want to remove this item?')) {
             setRemovedItems(prev => [...prev, id]);
@@ -20,7 +19,6 @@ function Card() {
             }, 500);
         }
     };
-
     const handleToggleActive = (id) => {
         setItems(prevItems =>
             prevItems.map(item =>
@@ -52,12 +50,7 @@ function Card() {
             </div>
 
             {/* Main content */}
-            <div className={`
-                      p-15 flex flex-col gap-10
-                      ${isDark ? 'bg-neutral-950 text-neutral-100' : 'bg-white text-black'}
-                      transition-colors duration-500
-            `}>
-
+            <div className={`p-15 flex flex-col gap-10`}>
                 <div className='flex flex-row justify-between items-center'>
                     <h2 className={`text-4xl ${isDark ? 'text-neutral-100' : 'text-black'} transition-colors duration-500`}>
                         Extensions List
