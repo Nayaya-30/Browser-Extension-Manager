@@ -3,31 +3,45 @@ import data from '../data/data.json';
 
 function Card() {
     const [filter, setFilter] = useState('all');
-    const [removedItems, setRemovedItems] = useState([]);  // renamed for clarity
+    const [removedItems, setRemovedItems] = useState([]);
+    const [permanentlyRemoved, setPermanentlyRemoved] = useState([]);
     const [isDark, setIsDark] = useState(false);
+    const [items, setItems] = useState(data); // store mutable data
 
     const handleIsDark = () => {
         setIsDark(prev => !prev);
     };
 
     const handleRemoved = (id) => {
-        setRemovedItems(prev => [...prev, id]);
+        if (window.confirm('Are you sure you want to remove this item?')) {
+            setRemovedItems(prev => [...prev, id]);
+            setTimeout(() => {
+                setPermanentlyRemoved(prev => [...prev, id]);
+            }, 500);
+        }
     };
 
-    const filteredData = data.filter(item =>
-        filter === 'all' ? true : item.isActive === filter
-    );
+    const handleToggleActive = (id) => {
+        setItems(prevItems =>
+            prevItems.map(item =>
+                item.id === id ? { ...item, isActive: !item.isActive } : item
+            )
+        );
+    };
+
+    const filteredData = items
+        .filter(item =>
+            filter === 'all' ? true : item.isActive === filter
+        )
+        .filter(item => !permanentlyRemoved.includes(item.id));
 
     return (
         <>
-            {/* Navbar */}
-            <div
-                className={`
-          flex flex-row justify-between items-center rounded-xl mx-15 mt-8 p-2
-          ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-100 text-black'}
-          transition-colors duration-500
-        `}
-            >
+            <div className={`
+                  flex flex-row justify-between items-center rounded-xl mx-15 mt-8 p-2
+                  ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-100 text-black'}
+                  transition-colors duration-500
+            `}>
                 <img src={'assets/images/logo.svg'} alt={'Logo'} />
                 <button onClick={handleIsDark} type='button'>
                     <img
@@ -38,27 +52,30 @@ function Card() {
             </div>
 
             {/* Main content */}
-            <div
-                className={`
-          p-15 flex flex-col gap-10
-          ${isDark ? 'bg-neutral-950 text-neutral-100' : 'bg-white text-black'}
-          transition-colors duration-500
-        `}
-            >
+            <div className={`
+                  p-15 flex flex-col gap-10
+                  ${isDark ? 'bg-neutral-950 text-neutral-100' : 'bg-white text-black'}
+                  transition-colors duration-500
+            `}>
                 <div className='flex flex-row justify-between items-center'>
                     <h2 className={`text-4xl ${isDark ? 'text-neutral-100' : 'text-black'} transition-colors duration-500`}>
                         Extensions List
                     </h2>
                     <span className='flex gap-2'>
-            <button onClick={() => setFilter('all')} className={`${filter === 'all' ? 'font-bold underline' : ''}`}>
-              All
-            </button>
-            <button onClick={() => setFilter(true)} className={`${filter === true ? 'font-bold underline' : ''}`}>
-              Active
-            </button>
-            <button onClick={() => setFilter(false)} className={`${filter === false ? 'font-bold underline' : ''}`}>
-              Inactive
-            </button>
+            {['all', true, false].map(value => (
+                <button
+                    key={value.toString()}
+                    onClick={() => setFilter(value)}
+                    className={`
+                    px-3 py-1 rounded
+                    transform transition-all duration-300
+                    ${filter === value
+                        ? 'scale-105 font-bold underline text-red-500'
+                        : 'hover:scale-105'}
+                `}>
+                    {value === 'all' ? 'All' : value === true ? 'Active' : 'Inactive'}
+                </button>
+            ))}
           </span>
                 </div>
 
@@ -80,11 +97,27 @@ function Card() {
                   <p className='text-sm text-neutral-500'>{item.description}</p>
                 </span>
                             </div>
-                            <div className='flex flex-row items-center justify-between'>
+                            <div className='flex flex-row items-center justify-between mt-4'>
                                 <button onClick={() => handleRemoved(item.id)}>Remove</button>
-                                <label>
-                                    <input type='checkbox' />
-                                    <span className='checkbox'></span>
+
+                                {/* Toggle switch */}
+                                <label className='relative inline-flex items-center cursor-pointer'>
+                                    <input
+                                        type='checkbox'
+                                        checked={item.isActive}
+                                        onChange={() => handleToggleActive(item.id)}
+                                        className='sr-only peer'
+                                    />
+                                    <div className={`
+                    w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full
+                    peer peer-checked:bg-red-500
+                    dark:bg-gray-700 peer-checked:after:translate-x-full
+                    peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px]
+                    after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                    after:transition-all
+                    dark:border-gray-600
+                    relative
+                  `}></div>
                                 </label>
                             </div>
                         </li>
@@ -94,5 +127,4 @@ function Card() {
         </>
     );
 }
-
 export default Card;
