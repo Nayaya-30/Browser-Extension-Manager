@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import data from '../data/data.json';
 
 function Card() {
@@ -33,15 +33,20 @@ function Card() {
         )
         .filter(item => !permanentlyRemoved.includes(item.id));
 
+    useEffect(() => {
+        document.body.classList.toggle('dark', isDark);
+    }, [isDark]);
+
+
     return (
         <>
             <div className={`
-                  flex flex-row justify-between items-center rounded-xl mx-15 mt-8 p-2
-                  ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-100 text-black'}
+                  flex flex-row justify-between items-center rounded-xl mb-15 px-2 py-1
+                  ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-200 text-neutral-900'}
                   transition-colors duration-500
             `}>
                 <img src={'assets/images/logo.svg'} alt={'Logo'} />
-                <button onClick={handleIsDark} type='button'>
+                <button className={`${isDark ? '' : 'light'}`} onClick={handleIsDark} type='button'>
                     <img
                         src={isDark ? 'assets/images/icon-sun.svg' : 'assets/images/icon-moon.svg'}
                         alt='Theme toggle'
@@ -50,9 +55,9 @@ function Card() {
             </div>
 
             {/* Main content */}
-            <div className={`p-15 flex flex-col gap-10`}>
+            <div className={`flex flex-col gap-10 `}>
                 <div className='flex flex-row justify-between items-center'>
-                    <h2 className={`text-4xl ${isDark ? 'text-neutral-100' : 'text-black'} transition-colors duration-500`}>
+                    <h2 className={`text-4xl ${isDark ? 'text-neutral-100' : 'text-neutral-900'} transition-colors duration-500`}>
                         Extensions List
                     </h2>
                     <span className='flex gap-2'>
@@ -62,23 +67,24 @@ function Card() {
                                 onClick={() => setFilter(value)}
                                 className={`
                                 px-3 py-1 rounded
-                                transform transition-all duration-300
+                                transform transition-all duration-300 
+                                ${isDark ? '' : 'light'}
                                 ${filter === value
                                     ? 'scale-105 font-bold underline text-red-500'
                                     : 'hover:scale-105'}
                             `}>
-                        {value === 'all' ? 'All' : value === true ? 'Active' : 'Inactive'}
+                                {value === 'all' ? 'All' : value === true ? 'Active' : 'Inactive'}
                             </button>
                         ))}
                     </span>
                 </div>
 
-                <ul className='list-none grid grid-cols-3 gap-4'>
-                    {filteredData.map((item, index) => (
+                <ul className='list-none rid-cols-1 gap-2 grid lg:grid-cols-3 lg:gap-4 sm:grid-cols-2 sm:gap-3'>
+                    {filteredData.map(item => (
                         <li
-                            key={item.id ?? index}
+                            key={item.id}
                             className={`
-                                ${isDark ? 'bg-neutral-800 text-neutral-100' : 'bg-neutral-200 text-black'}
+                                ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-200 text-neutral-900'}
                                 rounded-xl flex w-full h-50 flex-col justify-between p-6
                                 transition-all duration-500 ease-in-out
                                 ${removedItems.includes(item.id) ? 'opacity-0 scale-95 pointer-events-none' 
@@ -92,7 +98,7 @@ function Card() {
                                 </span>
                             </div>
                             <div className='flex flex-row items-center justify-between mt-4'>
-                                <button onClick={() => handleRemoved(item.id)}>Remove</button>
+                                <button className={isDark ? '' : 'light'} onClick={() => handleRemoved(item.id)}>Remove</button>
 
                                 {/* Toggle switch */}
                                 <label className='relative inline-flex items-center cursor-pointer'>
