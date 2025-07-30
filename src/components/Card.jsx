@@ -13,7 +13,12 @@ function Card() {
     };
 
     const handleRemoved = (id) => {
-        setRemovedItems(prev => [...prev, id]);
+        if (window.confirm('Are you sure you want to remove this item?')) {
+            setRemovedItems(prev => [...prev, id]);
+            setTimeout(() => {
+                setPermanentlyRemoved(prev => [...prev, id]);
+            }, 500);
+        }
     };
 
     const handleToggleActive = (id) => {
