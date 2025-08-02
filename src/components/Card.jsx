@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import data from '../data/data.json';
+import data from './data.json';
 
 function Card() {
     const [filter, setFilter] = useState('all');
