@@ -45,10 +45,10 @@ function Card() {
                   ${isDark ? 'bg-neutral-900 text-neutral-100' : 'bg-neutral-200 text-neutral-900'}
                   transition-colors duration-500
             `}>
-                <img src={'assets/images/logo.svg'} alt={'Logo'} />
+                <img src={'/images/logo.svg'} alt={'Logo'} />
                 <button className={`${isDark ? '' : 'light'}`} onClick={handleIsDark} type='button'>
                     <img
-                        src={isDark ? 'assets/images/icon-sun.svg' : 'assets/images/icon-moon.svg'}
+                        src={isDark ? '/images/icon-sun.svg' : '/images/icon-moon.svg'}
                         alt='Theme toggle'
                     />
                 </button>
