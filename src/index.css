@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+button {
+  @apply bg-neutral-600 border-1 border-neutral-300 rounded-4xl py-1 px-3
+  hover:bg-red-500 hover:border-red-500 hover:text-neutral-900 hover:cursor-pointer text-sm
+  outline-none focus:bg-neutral-500 focus:border-red-400 ml-1
+  active:bg-red-600 active:border-red-500 active:text-neutral-800
+  hover:scale-105 active:scale-105 transition-all duration-300;
+}
+.light {
+    @apply bg-neutral-400;
+}
+body {
+    background: linear-gradient(180deg, #EBF2FC 0%, #EEF8F9 100%);
+    @apply py-12 px-15;
+}
+.dark {
+    background: linear-gradient(180deg, #040918 0%, #091540 100%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
