@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import data from './data.json';
+import data from '../assets/data/data.json';
 
 function Card() {
     const [filter, setFilter] = useState('all');
@@ -79,7 +79,8 @@ function Card() {
                     </span>
                 </div>
 
-                <ul className='list-none rid-cols-1 gap-2 grid lg:grid-cols-3 lg:gap-4 sm:grid-cols-2 sm:gap-3'>
+                <ul className='list-none rid-cols-1 gap-2 grid lg:grid-cols-3
+                lg:gap-4 sm:grid-cols-2 sm:gap-3'>
                     {filteredData.map(item => (
                         <li
                             key={item.id}
